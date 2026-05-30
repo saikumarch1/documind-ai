@@ -346,16 +346,22 @@ def load_embeddings():
 
 @st.cache_resource
 def load_llm():
+    api_key = st.secrets.get("GOOGLE_API_KEY", "")
     return ChatGoogleGenerativeAI(
         model="gemini-1.5-flash",
-        google_api_key=st.secrets["GOOGLE_API_KEY"],
+        google_api_key=api_key,
         temperature=0.3
     )
 
 @st.cache_resource(show_spinner="Building index...")
 def build_vectorstore(_pages, doc_name):
+    # Filter out empty pages
+    valid_pages = [p for p in _pages if p.page_content.strip()]
+    if not valid_pages:
+        st.error("No readable text found in this PDF.")
+        return None, 0
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    chunks = splitter.split_documents(_pages)
+    chunks = splitter.split_documents(valid_pages)
     vs = FAISS.from_documents(chunks, load_embeddings())
     return vs, len(chunks)
 
