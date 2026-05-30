@@ -1,6 +1,12 @@
 import streamlit as st
 import os
 import tempfile
+import warnings
+warnings.filterwarnings("ignore")
+
+# Suppress HuggingFace unauthenticated request warnings
+os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
@@ -290,7 +296,7 @@ with st.sidebar:
     st.divider()
 
     st.markdown(f'<div class="sec-label">Document</div>', unsafe_allow_html=True)
-    uploaded = st.file_uploader("", type=["pdf"], label_visibility="collapsed")
+    uploaded = st.file_uploader("Upload PDF", type=["pdf"], label_visibility="collapsed")
 
     if st.session_state.doc_name:
         st.markdown(f"""
@@ -331,7 +337,7 @@ with st.sidebar:
           <div class="step-txt">{s}</div>
         </div>""", unsafe_allow_html=True)
 
-    st.markdown(f'<div style="font-size:11px;color:{TEXT2};margin-top:12px;text-align:center">Llama 3.2 · Runs locally · No API cost</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="font-size:11px;color:{TEXT2};margin-top:12px;text-align:center">DocuMind AI · Document Intelligence</div>', unsafe_allow_html=True)
 
 # ── HELPERS ───────────────────────────────────────────────────────────────────
 @st.cache_resource
