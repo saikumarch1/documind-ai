@@ -11,7 +11,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_groq import ChatGroq
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -346,10 +346,10 @@ def load_embeddings():
 
 @st.cache_resource
 def load_llm():
-    return ChatGroq(
-        model="llama-3.1-8b-instant",
-        groq_api_key=st.secrets["GROQ_API_KEY"],
-        max_tokens=1024
+    return ChatGoogleGenerativeAI(
+        model="gemini-1.5-flash",
+        google_api_key=st.secrets["GOOGLE_API_KEY"],
+        temperature=0.3
     )
 
 @st.cache_resource(show_spinner="Building index...")
