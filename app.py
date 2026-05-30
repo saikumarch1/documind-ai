@@ -382,7 +382,7 @@ def load_llm():
     except Exception:
         api_key = os.environ.get("OPENROUTER_API_KEY", "")
     return ChatOpenAI(
-        model="qwen/qwen3-235b-a22b:free",
+        model="meta-llama/llama-3.3-70b-instruct:free",
         openai_api_key=api_key,
         openai_api_base="https://openrouter.ai/api/v1",
         temperature=0.3,
