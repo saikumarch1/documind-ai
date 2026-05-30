@@ -11,7 +11,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -346,10 +346,14 @@ def load_embeddings():
 
 @st.cache_resource
 def load_llm():
-    api_key = st.secrets.get("GOOGLE_API_KEY", "")
-    return ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        google_api_key=api_key,
+    try:
+        api_key = st.secrets["OPENROUTER_API_KEY"]
+    except Exception:
+        api_key = os.environ.get("OPENROUTER_API_KEY", "")
+    return ChatOpenAI(
+        model="mistralai/mistral-7b-instruct:free",
+        openai_api_key=api_key,
+        openai_api_base="https://openrouter.ai/api/v1",
         temperature=0.3
     )
 
