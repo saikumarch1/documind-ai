@@ -91,43 +91,55 @@ LOGO_SVG = f"""<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns
 
 st.markdown(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-html, body, [class*="css"], .stApp {{
+html, body, [class*="css"], .stApp, .stApp > div, .main, .block-container {{
     background-color: {BG} !important;
     font-family: 'Inter', sans-serif !important;
     color: {TEXT} !important;
 }}
 
-/* hide default streamlit header */
-header[data-testid="stHeader"] {{ background: {BG} !important; }}
+/* hide default streamlit elements */
+header[data-testid="stHeader"] {{ background: {BG} !important; border-bottom: none !important; }}
+footer {{ display: none !important; }}
+#MainMenu {{ display: none !important; }}
+
+/* main content area */
+.main .block-container {{
+    background: {BG} !important;
+    padding-top: 2rem !important;
+    max-width: 100% !important;
+}}
 
 /* sidebar */
 section[data-testid="stSidebar"] {{
     background: {SURF} !important;
     border-right: 1px solid {BORDER} !important;
 }}
+section[data-testid="stSidebar"] > div {{
+    background: {SURF} !important;
+}}
 section[data-testid="stSidebar"] * {{ color: {TEXT} !important; }}
-section[data-testid="stSidebar"] .stMarkdown p {{ color: {TEXT2} !important; }}
 
-/* file uploader — fully themed */
-section[data-testid="stSidebar"] [data-testid="stFileUploader"] {{
+/* file uploader */
+[data-testid="stFileUploader"] {{
     background: {UPL_BG} !important;
     border: 1.5px dashed {UPL_BDR} !important;
     border-radius: 10px !important;
+    padding: 8px !important;
 }}
-section[data-testid="stSidebar"] [data-testid="stFileUploader"] * {{
+[data-testid="stFileUploader"] * {{
     color: {UPL_TXT} !important;
     background: transparent !important;
 }}
-section[data-testid="stSidebar"] [data-testid="stFileUploader"] button {{
+[data-testid="stFileUploader"] button {{
     border: 1px solid {UPL_BDR} !important;
     background: {SURF2} !important;
     color: {TEXT} !important;
     border-radius: 6px !important;
 }}
 
-/* theme toggle button — small, top right of sidebar */
+/* theme toggle */
 .theme-btn button {{
     background: {SURF2} !important;
     border: 1px solid {BORDER} !important;
@@ -135,8 +147,6 @@ section[data-testid="stSidebar"] [data-testid="stFileUploader"] button {{
     color: {TEXT} !important;
     font-size: 18px !important;
     padding: 4px 10px !important;
-    width: auto !important;
-    float: right;
 }}
 
 /* clear btn */
@@ -151,14 +161,17 @@ section[data-testid="stSidebar"] [data-testid="stFileUploader"] button {{
 }}
 
 /* chat input */
-.stChatInputContainer {{
+[data-testid="stChatInput"] {{
     background: {SURF} !important;
-    border: 1px solid {BORDER} !important;
-    border-radius: 12px !important;
+    border: 1.5px solid {BORDER} !important;
+    border-radius: 14px !important;
 }}
-.stChatInputContainer textarea {{
+[data-testid="stChatInput"] textarea {{
     color: {TEXT} !important;
     background: {SURF} !important;
+}}
+[data-testid="stChatInput"] textarea::placeholder {{
+    color: {TEXT2} !important;
 }}
 
 /* slider */
@@ -166,78 +179,89 @@ section[data-testid="stSidebar"] [data-testid="stFileUploader"] button {{
     background: {ACCENT} !important;
     border-color: {ACCENT} !important;
 }}
+[data-testid="stSlider"] p {{ color: {TEXT} !important; }}
 
 /* toggle */
 [data-testid="stToggle"] label {{ color: {TEXT} !important; }}
+[data-testid="stToggle"] p {{ color: {TEXT} !important; }}
 
-/* expander */
-.stExpander {{
-    background: {SURF2} !important;
-    border: 1px solid {BORDER} !important;
-    border-radius: 10px !important;
-}}
-
-/* metrics */
+/* metrics - fix both label and value */
 div[data-testid="stMetricValue"] {{
     color: {ACCENT} !important;
-    font-size: 20px !important;
-    font-weight: 600 !important;
+    font-size: 28px !important;
+    font-weight: 700 !important;
 }}
-div[data-testid="stMetricLabel"] {{ color: {TEXT2} !important; font-size: 11px !important; }}
+div[data-testid="stMetricLabel"] {{
+    color: {TEXT2} !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}}
+div[data-testid="stMetricLabel"] p {{
+    color: {TEXT2} !important;
+}}
 div[data-testid="metric-container"] {{
     background: {SURF} !important;
     border: 1px solid {BORDER} !important;
-    border-radius: 10px !important;
-    padding: 12px 16px !important;
+    border-radius: 12px !important;
+    padding: 16px 20px !important;
 }}
 
-.stDivider {{ border-color: {BORDER} !important; }}
+/* divider */
+hr {{ border-color: {BORDER} !important; }}
+[data-testid="stDivider"] {{ border-color: {BORDER} !important; }}
+
+/* all text */
+p, span, div, label {{ color: {TEXT} !important; }}
 .stMarkdown p {{ color: {TEXT} !important; }}
 
 /* logo */
 .logo-wrap {{ display:flex; align-items:center; gap:12px; padding:4px 0 12px; }}
 .logo-icon {{
-    width:40px; height:40px; background:{ACCENT_D};
-    border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    width:42px; height:42px; background:{ACCENT_D};
+    border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }}
-.logo-name {{ font-size:17px; font-weight:600; color:{TEXT}; letter-spacing:-0.3px; }}
-.logo-tag  {{ font-size:11px; color:{TEXT2}; margin-top:1px; }}
+.logo-name {{ font-size:17px; font-weight:700; color:{TEXT} !important; letter-spacing:-0.3px; }}
+.logo-tag  {{ font-size:11px; color:{TEXT2} !important; margin-top:2px; }}
 
 /* doc card */
 .doc-card {{
     background:{SURF2}; border:1px solid {BORDER};
-    border-radius:10px; padding:12px 14px; margin-top:8px;
+    border-radius:12px; padding:12px 14px; margin-top:8px;
 }}
-.doc-name {{ font-size:13px; font-weight:500; color:{TEXT}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }}
-.doc-meta {{ font-size:11px; color:{TEXT2}; margin-top:3px; }}
+.doc-name {{ font-size:13px; font-weight:600; color:{TEXT} !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }}
+.doc-meta {{ font-size:11px; color:{TEXT2} !important; margin-top:3px; }}
 .progress-track {{ height:3px; background:{BORDER}; border-radius:2px; margin-top:8px; overflow:hidden; }}
-.progress-fill  {{ height:3px; background:{ACCENT}; border-radius:2px; width:100%; }}
+.progress-fill  {{ height:3px; background:linear-gradient(90deg,{ACCENT},{ACCENT_D}); border-radius:2px; width:100%; }}
 
 /* chat bubbles */
-.chat-user {{ display:flex; justify-content:flex-end; margin:8px 0; }}
+.chat-user {{ display:flex; justify-content:flex-end; margin:10px 0; }}
 .chat-user-bubble {{
-    background:{USER_BG}; color:{USER_TXT};
-    border-radius:16px 16px 4px 16px;
-    padding:10px 14px; max-width:72%;
-    font-size:14px; line-height:1.55;
+    background:linear-gradient(135deg,{ACCENT},{ACCENT_D}); color:#ffffff !important;
+    border-radius:18px 18px 4px 18px;
+    padding:12px 16px; max-width:72%;
+    font-size:14px; line-height:1.6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }}
-.chat-bot {{ display:flex; gap:10px; margin:8px 0; align-items:flex-start; }}
+.chat-bot {{ display:flex; gap:12px; margin:10px 0; align-items:flex-start; }}
 .bot-avatar {{
-    width:30px; height:30px; background:{ACCENT_D};
-    border-radius:8px; flex-shrink:0;
+    width:32px; height:32px; background:{ACCENT_D};
+    border-radius:10px; flex-shrink:0;
     display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }}
 .chat-bot-bubble {{
-    background:{BOT_BG}; color:{BOT_TXT};
+    background:{BOT_BG}; color:{BOT_TXT} !important;
     border:1px solid {BORDER};
-    border-radius:4px 16px 16px 16px;
-    padding:10px 14px; max-width:82%;
-    font-size:14px; line-height:1.6;
+    border-radius:4px 18px 18px 18px;
+    padding:12px 16px; max-width:82%;
+    font-size:14px; line-height:1.65;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }}
 .src-tag {{
-    display:inline-block; background:{TAG_BG}; color:{TAG_TXT};
+    display:inline-block; background:{TAG_BG}; color:{TAG_TXT} !important;
     border:1px solid {TAG_BDR}; border-radius:20px;
-    font-size:11px; padding:2px 10px; margin:2px 3px 2px 0; font-weight:500;
+    font-size:11px; padding:3px 10px; margin:3px 3px 0 0; font-weight:500;
 }}
 
 /* empty state */
@@ -246,29 +270,36 @@ div[data-testid="metric-container"] {{
     justify-content:center; padding:5rem 2rem; text-align:center;
 }}
 .empty-icon {{
-    width:64px; height:64px; background:{SURF2};
-    border:1px solid {BORDER}; border-radius:16px;
+    width:72px; height:72px; background:{SURF2};
+    border:1px solid {BORDER}; border-radius:20px;
     display:flex; align-items:center; justify-content:center; margin-bottom:1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }}
-.empty-title {{ font-size:18px; font-weight:600; color:{TEXT}; margin-bottom:8px; }}
-.empty-sub   {{ font-size:14px; color:{TEXT2}; line-height:1.6; max-width:340px; }}
+.empty-title {{ font-size:20px; font-weight:700; color:{TEXT} !important; margin-bottom:10px; }}
+.empty-sub   {{ font-size:14px; color:{TEXT2} !important; line-height:1.7; max-width:360px; }}
 
 /* step rows */
 .step-row {{ display:flex; gap:10px; align-items:flex-start; margin-bottom:8px; }}
 .step-num {{
-    width:20px; height:20px; border-radius:50%;
-    background:{TAG_BG}; color:{TAG_TXT};
-    font-size:10px; font-weight:600;
+    width:22px; height:22px; border-radius:50%;
+    background:{TAG_BG}; color:{TAG_TXT} !important;
+    font-size:10px; font-weight:700;
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
     border:1px solid {TAG_BDR};
 }}
-.step-txt {{ font-size:12px; color:{TEXT2}; padding-top:2px; line-height:1.5; }}
+.step-txt {{ font-size:12px; color:{TEXT2} !important; padding-top:3px; line-height:1.5; }}
 
 /* section labels */
 .sec-label {{
-    font-size:10px; font-weight:600; color:{TEXT2};
-    text-transform:uppercase; letter-spacing:.07em; margin-bottom:8px;
+    font-size:10px; font-weight:700; color:{TEXT2} !important;
+    text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;
 }}
+
+/* spinner */
+.stSpinner > div {{ border-top-color: {ACCENT} !important; }}
+
+/* error box */
+.stAlert {{ background: {SURF2} !important; border-color: {BORDER} !important; color: {TEXT} !important; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -351,7 +382,7 @@ def load_llm():
     except Exception:
         api_key = os.environ.get("OPENROUTER_API_KEY", "")
     return ChatOpenAI(
-        model="meta-llama/llama-3.3-70b-instruct:free",
+        model="qwen/qwen3-235b-a22b:free",
         openai_api_key=api_key,
         openai_api_base="https://openrouter.ai/api/v1",
         temperature=0.3,
