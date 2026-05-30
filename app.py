@@ -11,7 +11,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_ollama import OllamaLLM
+from langchain_groq import ChatGroq
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -346,7 +346,10 @@ def load_embeddings():
 
 @st.cache_resource
 def load_llm():
-    return OllamaLLM(model="llama3.2")
+    return ChatGroq(
+        model="llama3-8b-8192",
+        groq_api_key=st.secrets["GROQ_API_KEY"]
+    )
 
 @st.cache_resource(show_spinner="Building index...")
 def build_vectorstore(_pages, doc_name):
