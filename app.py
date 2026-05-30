@@ -347,8 +347,9 @@ def load_embeddings():
 @st.cache_resource
 def load_llm():
     return ChatGroq(
-        model="llama3-8b-8192",
-        groq_api_key=st.secrets["GROQ_API_KEY"]
+        model="llama-3.1-8b-instant",
+        groq_api_key=st.secrets["GROQ_API_KEY"],
+        max_tokens=1024
     )
 
 @st.cache_resource(show_spinner="Building index...")
