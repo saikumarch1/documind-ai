@@ -455,7 +455,17 @@ Answer:""")
         chain = prompt | load_llm() | StrOutputParser()
 
         with st.spinner("Thinking..."):
-            response = "".join(chain.stream({"context": context, "question": question}))
+            try:
+                response = "".join(chain.stream({"context": context, "question": question}))
+            except Exception as e:
+                err = str(e).lower()
+                if "rate" in err:
+                    st.error("Rate limit hit — please wait 10 seconds and try again.")
+                elif "auth" in err or "key" in err:
+                    st.error("API key error — check Streamlit secrets.")
+                else:
+                    st.error(f"Error: {str(e)}")
+                st.stop()
 
         sources = [{"page": docs[i].metadata.get("page","?"),
                     "rel": max(0, min(100, int((1-scores[i])*100)))}
